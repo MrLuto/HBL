@@ -7,13 +7,13 @@ cookies_splitted.forEach(cookie => {
         loggedIn = true;
     }else if(cookie.startsWith("user=")){
         email = cookie.split("=")[1];
-        document.getElementById("email").value = email;
+        document.getElementById("email").setAttribute('value','tomatensalamie');
     }
 });
 
-//if (loggedIn == false){
-//    window.location.href = "login.html";
-//}
+if (loggedIn == false){
+    window.location.href = "login.html";
+}
 
 let url = "http://162.55.245.188:26133/hbl/getinfo?uid=" + email;
 let request = new XMLHttpRequest();
