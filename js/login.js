@@ -11,6 +11,11 @@ if (loggedIn == true){
     window.location.href = "settings.html";
 }
 
+//check if user is using http or https
+if (window.location.protocol != "http:"){
+    window.location.href = "http://help.byluto.nl/login.html";
+}
+
 function login(){
     let username = document.getElementById("username").value;
     let password = document.getElementById("password").value;
