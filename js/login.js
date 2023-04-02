@@ -25,6 +25,7 @@ function login(){
     let response = request.responseText;
     if (response == "true"){
         document.cookie = "loggedIn=true; expires=Thu, 18 Dec 2028 12:00:00 UTC; path=/;";
+        document.cookie = "user=" + username + "; expires=Thu, 18 Dec 2028 12:00:00 UTC; path=/;";
         window.location.href = "settings.html";
     } else {
         document.cookie = "loggedIn=false; expires=Thu, 18 Dec 2028 12:00:00 UTC; path=/;";
