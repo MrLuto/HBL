@@ -4,6 +4,8 @@ var loggedIn = false;
 cookies_splitted.forEach(cookie => {
     if (cookie == "loggedIn=true"){
         loggedIn = true;
+    }else if(cookie.startsWith("user=")){
+        var email = cookie.split("=")[1]
     }
 });
 
