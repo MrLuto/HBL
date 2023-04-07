@@ -1,3 +1,5 @@
+window.location.href = "index.html";
+
 let cookies = document.cookie;
 let cookies_splitted = cookies.split(";");
 var loggedIn = false;
