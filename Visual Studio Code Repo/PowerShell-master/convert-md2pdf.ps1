@@ -1,1 +1,0 @@
-gci -r -i *.md |foreach{$pdf=$_.directoryname+"\"+$_.basename+".pdf";pandoc -f markdown -s --citeproc $_.name -o $pdf}

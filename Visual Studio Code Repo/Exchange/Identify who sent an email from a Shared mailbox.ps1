@@ -1,1 +1,0 @@
-Search-MailboxAuditLog -Identity mailadres -ShowDetails | Where {$_.Operation -eq "SendAs"} | Format-Table Operation, OperationResult, LogonUserDisplayName, ItemSubject, LastAccessed, Date -Auto
