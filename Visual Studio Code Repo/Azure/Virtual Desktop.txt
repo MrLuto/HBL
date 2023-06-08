@@ -1,0 +1,88 @@
+###################################################################################################
+
+Powershell Connect to VDI HOST POOL:
+Add-RdsAccount -DeploymentUrl "https://rdbroker.wvd.microsoft.com"
+Start menuhttps://rdweb.wvd.microsoft.com/api/feeddiscovery/webfeeddiscovery.aspx
+
+###################################################################################################
+
+Tenant ID: 40854e46-d41a-41b3-985c-a3ebf8ad08b0
+https://login.microsoftonline.com/40854e46-d41a-41b3-985c-a3ebf8ad08b0/adminconsent?client_id=5a0aa725-4958-4b0c-80a9-34562e23f3b7&redirect_uri=https%3A%2F%2Frdweb.wvd.microsoft.com%2FRDWeb%2FConsentCallback
+
+Subscription ID: 3811fcc1-c5a6-4f77-ba3d-a1980b5563e1
+
+
+New-RdsTenant -Name VDI-O-Prognose -AadTenantId 40854e46-d41a-41b3-985c-a3ebf8ad08b0 -AzureSubscriptionId 3811fcc1-c5a6-4f77-ba3d-a1980b5563e1
+
+Import-Module AzureAD
+$aadContext = Connect-AzureAD
+$svcPrincipal = New-AzureADApplication -AvailableToOtherTenants $true -DisplayName "Windows Virtual Desktop Svc Principal"
+$svcPrincipalCreds = New-AzureADApplicationPasswordCredential -ObjectId $svcPrincipal.ObjectId
+
+Password: ooovqXb63ZoIvPKjMT9nJncG3BshFiSh82Y83GAmGMk=
+Application ID: e4577eb9-2bc8-4add-90a5-589b111b910c
+Tenant ID: 40854e46-d41a-41b3-985c-a3ebf8ad08b0
+Tenant Name: VDI-O-Prognose
+Tenant Group Name: Default Tenant Group
+Hostpool name: VDI-O-Prognose
+
+$myTenantName = "VDI-O-Prognose"
+New-RdsRoleAssignment -RoleDefinitionName "RDS Owner" -ApplicationId $svcPrincipal.AppId -TenantName $myTenantName
+
+
+RdsRoleAssignmentID: 2c0c6b91-6d73-4c49-e2ea-08d79c8b72d0
+RoleDefinitionName: RDS Owner
+RoleDefinitionId: 3b14baea-8d82-4610-f5da-08d623dd1cc4
+
+$creds = New-Object System.Management.Automation.PSCredential($svcPrincipal.AppId, (ConvertTo-SecureString $svcPrincipalCreds.Value -AsPlainText -Force))
+Add-RdsAccount -DeploymentUrl "https://rdbroker.wvd.microsoft.com" -Credential $creds -ServicePrincipal -AadTenantId $aadContext.TenantId.Guid
+
+Sign in met service principal geslaagd!
+
+
+
+
+
+Add-RdsAppGroupUser VDI-O-Prognose VDI-O-Prognose "VDI-O-Prognose" -UserPrincipalName b.hollaar@propendum.nl
+Remove-RdsAppGroupUser VDI-O-Prognose VDI-O-Prognose "Desktop Application Group" -UserPrincipalName b.hollaar@propendum.nl
+New-RdsAppGroup VDI-O-Prognose VDI-O-Prognose VDI-O-Prognose -ResourceType "RemoteApp"
+Get-RdsAppGroup VDI-O-Prognose VDI-O-Prognose
+Get-RdsStartMenuApp VDI-O-Prognose VDI-O-Prognose VDI-O-Prognose
+
+New-RdsRemoteApp VDI-O-Prognose VDI-O-Prognose VDI-O-Prognose -Name O-Prognose -AppAlias oprognosenetv2019
+
+AppAlias             : oprognosenetv2019
+FriendlyName         : O-Prognose.NET v2019
+FilePath             : C:\Program Files (x86)\OPrognose.NET\opnet3.exe
+CommandLineArguments :
+IconPath             : C:\Program Files (x86)\OPrognose.NET\opnet3.exe
+IconIndex            : 0
+
+New-RdsRemoteApp VDI-O-Prognose VDI-O-Prognose VDI-O-Prognose -Name O-Prognose -Filepath "C:\Program Files (x86)\OPrognose.NET\opnet3.exe" -IconPath "C:\Program Files (x86)\OPrognose.NET\opnet3.exe" -IconIndex "0"
+
+Get-RdsRemoteApp VDI-O-Prognose VDI-O-Prognose VDI-O-Prognose
+
+Add-RdsAppGroupUser VDI-O-Prognose VDI-O-Prognose "VDI-O-Prognose" -UserPrincipalName b.hollaar@propendum.nl
+Add-RdsAppGroupUser VDI-O-Prognose VDI-O-Prognose "VDI-O-Prognose" -UserPrincipalName j.kaptein@propendum.nl
+Add-RdsAppGroupUser VDI-O-Prognose VDI-O-Prognose "VDI-O-Prognose" -UserPrincipalName j.groenendijk@propendum.nl
+
+
+SQL server Datapath:
+Server=(local)\OPROGNOSE;DATABASE=opsql;integrated security=true;
+
+##################################################################
+LET OP!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+Zorg ervoor dat je eerst een nieuwe login/user maakt onder de opsql database met de windows user van degene die je rechten wilt geven op de database.
+Op deze manier creër je SSO voor de VDI users en hebben ze geen authenticatie nodig in de connection string (Hens de Integrated security=true; in de String)
+Als je bovenstaande niet uitvoert moet je het met een local aangemaakt user die DBO-Owner rechten heeft.
+:)
+##################################################################
+
+
+
+Get-RdsSessionHost -TenantName "VDI-O-Prognose" -HostPoolName "VDI-O-Prognose"
+Get-RdsDiagnosticActivities -TenantName "VDI-O-Prognose" -Detailed
+
+
+
+GroupName Windows Server AD voor rechten op VDI:	Sec_Files_Oprognose

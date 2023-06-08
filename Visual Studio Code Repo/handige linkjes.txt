@@ -1,0 +1,6 @@
+https://o365reports.com/2021/11/02/get-calendar-permissions-report-for-office365-mailboxes-powershell/
+https://alitajran.com/install-exchange-online-powershell-module/
+https://www.educba.com/useful-powershell-scripts/
+https://learn.microsoft.com/en-us/powershell/scripting/samples/sample-scripts-for-administration?view=powershell-7.3
+https://lazyadmin.nl/powershell/powershell-script/
+https://github.com/search?p=2&q=powershell+scripts&type=Repositories
